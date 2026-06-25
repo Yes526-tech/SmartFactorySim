@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ei+X1zHAMXg=",
+  "success": true,
+  "projectFilePath": "/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/BandSimulator.csproj",
+  "expectedPackageFiles": [
+    "/Users/yes-macbook/.nuget/packages/mqttnet/4.3.3.952/mqttnet.4.3.3.952.nupkg.sha512"
+  ],
+  "logs": []
+}

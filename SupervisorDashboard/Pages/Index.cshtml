@@ -1,0 +1,131 @@
+﻿@page
+@model IndexModel
+@{
+    Layout = null; 
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Etiketleme Amirliği Kontrol Paneli</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body style="background-color: #f4f6f9;">
+
+<div class="container-fluid py-4" style="min-height: 100vh;">
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold" style="color: #2b3e50;"><i class="bi bi-activity"></i> SmartLogistics // Kontrol Merkezi</h2>
+            <p class="text-muted m-0">Fabrika anlık etiketleme, depo ve hammadde senkronizasyon radarı</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-success px-3 py-2 fs-6" id="systemStatus">Sistem Çevrimiçi</span>
+            <div class="text-muted small mt-1" id="liveClock">Yükleniyor...</div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #2b3e50 !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Üretim Noktası (BANT-2)</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="bant2Status">Beklemede</span>
+                        <span class="badge bg-secondary" id="bant2Badge">Normal</span>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">Malzeme Seviyesi:</small>
+                        <div class="progress mt-1" style="height: 10px;">
+                            <div id="bant2Progress" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #18bc9c !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Etiket Depo Durumu</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="depoStatus">Hazır</span>
+                        <div class="small text-muted" id="agvInfo">Aktif Görev Yok</div>
+                    </div>
+                    <span class="badge bg-light text-dark border w-100 text-start" id="depoLastAction">Son Hareket: Bekleniyor...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #f39c12 !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Vardiya & Organizasyon</h5>
+                    <div class="my-3">
+                        <div class="fw-bold fs-5">Aktif Vardiya: <span class="text-primary" id="activeShift">Gündüz Vardiyası</span></div>
+                        <small class="text-muted">Sorumlu Amirlik: Etiketleme Amirliği Nöbetçi Ekip</small>
+                    </div>
+                    <div class="p-2 bg-light rounded text-center small text-dark fw-bold" style="border: 1px dashed #f39c12;">
+                        Kesintisiz State-Transfer Aktif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 fw-bold d-flex justify-content-between align-items-center" style="color: #2b3e50;">
+                    <span><i class="bi bi-cpu-fill me-2"></i> Canlı Endüstriyel Veri Akışı (Milisaniyelik Log)</span>
+                    <span class="badge bg-dark" id="logCounter">0 Mesaj</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-hover align-middle m-0" id="logTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 15%;">Zaman</th>
+                                    <th style="width: 25%;">Birim / Kanal (Topic)</th>
+                                    <th style="width: 25%;">Durum</th>
+                                    <th style="width: 35%;">İşlem Detayı</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logTableBody">
+                                <tr id="noDataRow">
+                                    <td colspan="4" class="text-center text-muted py-4">Fabrikadan canlı veri akışı bekleniyor... Cihazları tetikleyin.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-dark"><i class="bi bi-list-check me-2"></i>Olay Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body p-0" id="detailModalBody">
+                </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="~/js/dashboard.js"></script>
+
+</body>
+</html>

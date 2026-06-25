@@ -1,0 +1,17 @@
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/BandSimulator
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/BandSimulator.deps.json
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/BandSimulator.runtimeconfig.json
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/BandSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/BandSimulator.pdb
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/bin/Debug/net8.0/MQTTnet.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.csproj.AssemblyReference.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.GeneratedMSBuildEditorConfig.editorconfig
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.AssemblyInfoInputs.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.AssemblyInfo.cs
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.csproj.CoreCompileInputs.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimu.ABC7C9EF.Up2Date
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/refint/BandSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.pdb
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.genruntimeconfig.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/ref/BandSimulator.dll

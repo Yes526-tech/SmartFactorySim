@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "EuS/6lfBzHo=",
+  "success": true,
+  "projectFilePath": "/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/DepotSimulator.csproj",
+  "expectedPackageFiles": [
+    "/Users/yes-macbook/.nuget/packages/mqttnet/4.3.3.952/mqttnet.4.3.3.952.nupkg.sha512"
+  ],
+  "logs": []
+}

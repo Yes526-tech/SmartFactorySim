@@ -1,0 +1,5 @@
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net9.0/BandSimulator.csproj.AssemblyReference.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net9.0/BandSimulator.GeneratedMSBuildEditorConfig.editorconfig
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net9.0/BandSimulator.AssemblyInfoInputs.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net9.0/BandSimulator.AssemblyInfo.cs
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net9.0/BandSimulator.csproj.CoreCompileInputs.cache

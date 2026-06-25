@@ -1,0 +1,17 @@
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/DepotSimulator
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/DepotSimulator.deps.json
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/DepotSimulator.runtimeconfig.json
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/DepotSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/DepotSimulator.pdb
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/bin/Debug/net8.0/MQTTnet.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.csproj.AssemblyReference.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.GeneratedMSBuildEditorConfig.editorconfig
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.AssemblyInfoInputs.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.AssemblyInfo.cs
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.csproj.CoreCompileInputs.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSim.B24B6A9D.Up2Date
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/refint/DepotSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.pdb
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/DepotSimulator.genruntimeconfig.cache
+/Users/yes-macbook/Desktop/SmartFactorySim/DepotSimulator/obj/Debug/net8.0/ref/DepotSimulator.dll
