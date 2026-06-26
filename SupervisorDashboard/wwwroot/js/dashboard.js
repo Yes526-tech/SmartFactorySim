@@ -1,34 +1,29 @@
 // 1. Canlı Saat ve Dinamik Vardiya Güncelleme (Otomatik Motor)
 setInterval(() => {
     const now = new Date();
-    
-    // Saati Güncelle
     const liveClock = document.getElementById('liveClock');
     if (liveClock) {
         liveClock.innerText = now.toLocaleString('tr-TR');
     }
 
-    // Vardiya Hesaplama Mantığı (0-24 Saat Formatı)
     const currentHour = now.getHours();
     let shiftName = "";
     let shiftColorClass = "";
 
     if (currentHour >= 8 && currentHour < 16) {
         shiftName = "Gündüz Vardiyası";
-        shiftColorClass = "text-primary"; // Mavi
+        shiftColorClass = "text-primary";
     } else if (currentHour >= 16 && currentHour < 24) {
         shiftName = "Akşam Vardiyası";
-        shiftColorClass = "text-warning"; // Turuncu/Sarı
+        shiftColorClass = "text-warning";
     } else {
         shiftName = "Gece Vardiyası";
-        shiftColorClass = "text-info";    // Açık Mavi
+        shiftColorClass = "text-info";
     }
 
-    // Ekrana Bas
     const activeShiftElement = document.getElementById('activeShift');
     if (activeShiftElement) {
         activeShiftElement.innerText = shiftName;
-        // Vardiyaya göre metin rengini de dinamik değiştiriyoruz
         activeShiftElement.className = shiftColorClass + " fw-bold";
     }
 }, 1000);
@@ -39,7 +34,7 @@ const connection = new signalR.HubConnectionBuilder()
     .build();
 
 let messageCount = 0;
-let messageHistory = []; // Gelen verileri butonla eşleştirmek için hafızada tutuyoruz
+let messageHistory = [];
 
 connection.on("ReceiveFactoryData", function (topic, payload) {
     messageCount++;
@@ -52,7 +47,6 @@ connection.on("ReceiveFactoryData", function (topic, payload) {
     const data = JSON.parse(payload);
     const now = new Date().toLocaleTimeString('tr-TR');
     
-    // Mesajı hafızaya kaydet
     messageHistory[messageCount] = data;
 
     const tableBody = document.getElementById('logTableBody');
@@ -61,39 +55,109 @@ connection.on("ReceiveFactoryData", function (topic, payload) {
     const row = tableBody.insertRow(0);
     let statusBadge = `<span class="badge bg-info">Bilgi</span>`;
     
-    // --- GERÇEK ZAMANLI OTOMASYON VE GÖRSELLEŞTİRME MANTIĞI ---
+    // --- AKILLI ENDÜSTRİYEL LOJİSTİK VE ETİKET ENTEGRASYON MOTORU ---
+    
+    // Senaryo A: Herhangi bir banttan gelen klasik kritik seviye "Malzeme Talebi" uyarısı
     if (topic.includes("talep")) {
         statusBadge = `<span class="badge bg-danger">Malzeme Talebi</span>`;
         
-        document.getElementById('bant2Status').innerText = "MALZEME EKSİK";
-        document.getElementById('bant2Status').className = "fs-4 fw-bold text-danger";
+        const targetBant = data.bant_id || "BANT-2"; // Veriden gelen bant ID'si
         
-        const badge = document.getElementById('bant2Badge');
-        badge.innerText = data.durum_kodu;
-        badge.className = "badge bg-danger";
+        // İlgili bandın kartını tehlike moduna alıyoruz
+        const bStatus = document.getElementById(`status_${targetBant}`);
+        if (bStatus) {
+            bStatus.innerText = "MALZEME EKSİK";
+            bStatus.className = "fs-4 fw-bold text-danger";
+        }
+        const bBadge = document.getElementById(`badge_${targetBant}`);
+        if (bBadge) bBadge.className = "badge bg-danger animate__animated animate__flash animate__infinite";
         
-        const progressBar = document.getElementById('bant2Progress');
-        progressBar.style.width = data.kalan_seviye_yuzde + "%";
-        progressBar.className = "progress-bar bg-danger";
-        
-        // Not: Otomatik saat motoru ile çakışmaması için data.vardiya_id ataması buradan kaldırıldı.
+        const bProgress = document.getElementById(`progress_${targetBant}`);
+        if (bProgress) {
+            bProgress.style.width = (data.kalan_seviye_yuzde || 15) + "%";
+            bProgress.className = "progress-bar bg-danger";
+        }
     } 
-    else if (topic.includes("aksiyon")) {
-        statusBadge = `<span class="badge bg-success">Lojistik Sevkiyat</span>`;
+    
+    // Senaryo B: ETİKET DEPOSUNDAN BANTLARA ETİKET SEVKİYATI
+    else if (topic.includes("etiket_depo/sevkiyat")) {
+        statusBadge = `<span class="badge bg-success">Etiket Sevkiyatı</span>`;
         
-        document.getElementById('depoStatus').innerText = data.aksiyon_durumu;
+        const targetBant = data.hedef_bant; // Örn: BANT-1
+        
+        // 1. Etiket Depo Kartını Güncelle
+        document.getElementById('depoStatus').innerText = "SEVKİYAT YAPILDI";
         document.getElementById('depoStatus').className = "fs-4 fw-bold text-success";
-        document.getElementById('agvInfo').innerHTML = `<strong class="text-success">${data.tasiyici_arac_id}</strong> Yolda`;
-        document.getElementById('depoLastAction').innerText = `Son Hareket: ${data.hedef_nokta}'ye malzeme çıkışı yapıldı.`;
+        document.getElementById('agvInfo').innerHTML = `<span class="spinner-border spinner-border-sm text-success me-1"></span> <strong>${data.tasiyici_arac_id}</strong> Yolda`;
+        document.getElementById('depoLastAction').innerText = `Son Hareket: ${targetBant} hattına malzeme çıkışı sağlandı.`;
         
+        // 2. Hedef Bandın Lojistik Bölümünü Canlandır
+        const bStatus = document.getElementById(`status_${targetBant}`);
+        if (bStatus) {
+            bStatus.innerText = "ETİKET YOLDA";
+            bStatus.className = "fs-4 fw-bold text-warning";
+        }
+        const bProgress = document.getElementById(`progress_${targetBant}`);
+        if (bProgress) bProgress.className = "progress-bar bg-warning progress-bar-striped progress-bar-animated";
+        
+        const bLogistic = document.getElementById(`logistic_${targetBant}`);
+        if (bLogistic) {
+            bLogistic.innerHTML = `<i class="bi bi-tags-fill text-warning me-1"></i> <span class="text-warning fw-bold">${data.etiket_tipi} (${data.miktar} Adet)</span> yolda.`;
+        }
+
+        // Teslimat simülasyonu: 4 saniye sonra bant eski normal durumuna döner
         setTimeout(() => {
-            document.getElementById('bant2Status').innerText = "MALZEME YOLDA";
-            document.getElementById('bant2Status').className = "fs-4 fw-bold text-warning";
-            document.getElementById('bant2Badge').className = "badge bg-warning text-dark";
-            document.getElementById('bant2Progress').className = "progress-bar bg-warning progress-bar-striped progress-bar-animated";
-        }, 500);
+            if (document.getElementById(`status_${targetBant}`).innerText === "ETİKET YOLDA") {
+                document.getElementById(`status_${targetBant}`).innerText = "Normal";
+                document.getElementById(`status_${targetBant}`).className = "fs-4 fw-bold text-success";
+                document.getElementById(`progress_${targetBant}`).className = "progress-bar bg-success";
+                document.getElementById(`progress_${targetBant}`).style.width = "100%";
+                document.getElementById(`logistic_${targetBant}`).innerHTML = `<i class="bi bi-check-circle-fill text-success me-1"></i> Etiketler başarıyla beslendi.`;
+            }
+        }, 4000);
+    }
+    
+    // Senaryo C: MAMÜL DEPOSUNDAN BANTLARA AKÜ SEVKİYATI (FORKLİFT)
+    else if (topic.includes("mamul_depo/sevkiyat")) {
+        statusBadge = `<span class="badge" style="background-color: #8e44ad;">Akü Sevkiyatı</span>`;
+        
+        const targetBant = data.hedef_bant; // Örn: BANT-2
+        
+        // 1. Mamül Depo Kartını Güncelle (Mor Tema)
+        document.getElementById('mamulStatus').innerText = "TRANSFERDE";
+        document.getElementById('mamulStatus').style.color = "#8e44ad";
+        document.getElementById('forkliftInfo').innerHTML = `<i class="bi bi-truck text-primary animate__animated animate__bounce animate__infinite"></i> <strong>${data.forklift_id}</strong> Aktif`;
+        document.getElementById('mamulLastAction').innerText = `Son Rapor: [${data.cikis_bolumu}] konumundan ${targetBant} hattına yükleme yapıldı.`;
+        
+        // 2. Hedef Bandın Durumunu Güncelle
+        const bStatus = document.getElementById(`status_${targetBant}`);
+        if (bStatus) {
+            bStatus.innerText = "AKÜ YOLDA";
+            bStatus.className = "fs-4 fw-bold text-info";
+        }
+        const bProgress = document.getElementById(`progress_${targetBant}`);
+        if (bProgress) bProgress.className = "progress-bar bg-info progress-bar-striped progress-bar-animated";
+        
+        const bLogistic = document.getElementById(`logistic_${targetBant}`);
+        if (bLogistic) {
+            bLogistic.innerHTML = `<i class="bi bi-lightning-charge-fill text-info me-1"></i> Lojistik Akış: <span class="text-info fw-bold">${data.aku_tipi}</span> forkliftle taşınıyor.`;
+        }
+
+        // Teslimat simülasyonu: 4 saniye sonra bant eski normal durumuna döner
+        setTimeout(() => {
+            if (document.getElementById(`status_${targetBant}`).innerText === "AKÜ YOLDA") {
+                document.getElementById(`status_${targetBant}`).innerText = "Normal";
+                document.getElementById(`status_${targetBant}`).className = "fs-4 fw-bold text-success";
+                document.getElementById(`progress_${targetBant}`).className = "progress-bar bg-success";
+                document.getElementById(`progress_${targetBant}`).style.width = "100%";
+                document.getElementById(`logistic_${targetBant}`).innerHTML = `<i class="bi bi-check-circle-fill text-success me-1"></i> Aküler hatta teslim edildi.`;
+                document.getElementById('mamulStatus').innerText = "TESLİM EDİLDİ";
+                document.getElementById('mamulStatus').style.color = "#27ae60";
+            }
+        }, 4000);
     }
 
+    // Tablo Satır İçeriğini Bas
     row.innerHTML = `
         <td><strong class="text-secondary">${now}</strong></td>
         <td><span class="font-monospace text-primary small">${topic}</span></td>
@@ -106,11 +170,10 @@ connection.on("ReceiveFactoryData", function (topic, payload) {
     `;
 });
 
-// Detay Butonuna Tıklanınca Çalışacak Veri Düzenleme Motoru
+// Detay Gör Modalı
 window.showDetails = function(id) {
     const msgData = messageHistory[id];
     let htmlContent = '<ul class="list-group list-group-flush">';
-    
     for (const [key, value] of Object.entries(msgData)) {
         let cleanKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         htmlContent += `<li class="list-group-item d-flex justify-content-between align-items-center py-3">
@@ -119,11 +182,76 @@ window.showDetails = function(id) {
                         </li>`;
     }
     htmlContent += '</ul>';
-    
     document.getElementById('detailModalBody').innerHTML = htmlContent;
-    
     const detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
     detailModal.show();
+};
+
+
+// --- TAKTİKSEL PERSONEL VE VARDİYA VERİTABANI ---
+const shiftTeams = {
+    "Gündüz Vardiyası": [
+        { isim: "Yunus Emre", gorev: "Sistem ve Otomasyon Amiri", tel: "+90 532 111 2233", durum: "Sahada", durumRenk: "success", ikon: "bi-star-fill" },
+        { isim: "Selinay", gorev: "Taktik Lojistik Koordinatörü", tel: "+90 554 222 3344", durum: "Sahada", durumRenk: "success", ikon: "bi-headset" },
+        { isim: "Ahmet Yılmaz", gorev: "Bant-1 Sorumlusu", tel: "+90 505 333 4455", durum: "İzinde", durumRenk: "danger", ikon: "bi-wrench" },
+        { isim: "Kemal Demir", gorev: "Forklift Operatörü (A-Blok)", tel: "+90 544 444 5566", durum: "Sahada", durumRenk: "success", ikon: "bi-truck" }
+    ],
+    "Akşam Vardiyası": [
+        { isim: "Mehmet Kaya", gorev: "Vardiya Amiri", tel: "+90 532 999 8877", durum: "Sahada", durumRenk: "success", ikon: "bi-star-half" },
+        { isim: "Ayşe Çelik", gorev: "Etiket Depo Görevlisi", tel: "+90 554 888 7766", durum: "Sahada", durumRenk: "success", ikon: "bi-tags" },
+        { isim: "Burak Can", gorev: "Bant-2 Sorumlusu", tel: "+90 505 777 6655", durum: "Raporlu", durumRenk: "warning", ikon: "bi-wrench" }
+    ],
+    "Gece Vardiyası": [
+        { isim: "Hasan Şahin", gorev: "Gece Nöbetçi Amiri", tel: "+90 544 123 4567", durum: "Sahada", durumRenk: "success", ikon: "bi-moon-stars" },
+        { isim: "Ali Vefa", gorev: "Acil Bakım Teknisyeni", tel: "+90 532 987 6543", durum: "Sahada", durumRenk: "success", ikon: "bi-tools" }
+    ]
+};
+
+// Ekip Görüntüleme Motoru
+window.showShiftTeam = function() {
+    // 1. O anki aktif vardiyayı ekrandan oku
+    const currentShift = document.getElementById('activeShift').innerText;
+    
+    // 2. Modal başlığını güncelle
+    const modalTitle = document.getElementById('teamModalTitle');
+    if(modalTitle) modalTitle.innerText = `${currentShift} - Operasyon Ekibi`;
+    
+    // 3. İlgili vardiyanın takımını seç
+    const team = shiftTeams[currentShift] || [];
+    let htmlContent = '';
+
+    // 4. Takımdaki her bir kişi için şık bir kart oluştur
+    team.forEach(person => {
+        // İzindeyse kartı biraz soluk gösterelim (opacity)
+        const opacity = person.durum !== "Sahada" ? "opacity-75" : "";
+        
+        htmlContent += `
+            <div class="col-md-6 ${opacity}">
+                <div class="card border-0 shadow-sm h-100" style="border-left: 4px solid var(--bs-${person.durumRenk}) !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="fw-bold mb-0 text-dark"><i class="bi ${person.ikon} text-secondary me-2"></i>${person.isim}</h6>
+                            <span class="badge bg-${person.durumRenk}">${person.durum}</span>
+                        </div>
+                        <div class="text-muted small mb-2">${person.gorev}</div>
+                        <div class="bg-light p-2 rounded small border d-flex justify-content-between">
+                            <span><i class="bi bi-telephone-fill text-muted me-1"></i> İletişim:</span>
+                            <a href="tel:${person.tel.replace(/\s/g, '')}" class="text-decoration-none fw-bold text-dark">${person.tel}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    if(team.length === 0) {
+        htmlContent = `<div class="col-12 text-center text-muted py-4">Bu vardiya için atanmış personel bulunamadı.</div>`;
+    }
+
+    // 5. Kartları Modal'ın içine bas ve göster
+    document.getElementById('teamModalBody').innerHTML = htmlContent;
+    const teamModal = new bootstrap.Modal(document.getElementById('teamModal'));
+    teamModal.show();
 };
 
 // Bağlantıyı başlat

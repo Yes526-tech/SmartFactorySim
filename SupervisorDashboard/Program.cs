@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using SupervisorDashboard.Data; // AppDbContext bu klasörün içinde olduğu için bu şart!
 using SupervisorDashboard.Hubs;
 using SupervisorDashboard.Services;
 
@@ -8,7 +10,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR(); // SignalR eklendi
 builder.Services.AddHostedService<MqttBackgroundWorker>(); // Arka plan işçimiz eklendi
 
+// Veritabanı bağlantısı (SQLite kullanıyoruz)
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseSqlite("Data Source=factory.db"));
+
 var app = builder.Build();
+
+
 
 if (!app.Environment.IsDevelopment())
 {
