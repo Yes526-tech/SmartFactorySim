@@ -124,3 +124,4 @@
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net8.0/SupervisorDashboard.pdb
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net8.0/SupervisorDashboard.genruntimeconfig.cache
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net8.0/ref/SupervisorDashboard.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net8.0/SupervisorDashboard.sourcelink.json

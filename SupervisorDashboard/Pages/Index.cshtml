@@ -29,6 +29,24 @@
 
     <div class="row g-3 mb-4">
         <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #3498db !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Üretim Noktası (BANT-1)</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="bant1Status">Beklemede</span>
+                        <span class="badge bg-secondary" id="bant1Badge">Normal</span>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">Malzeme Seviyesi:</small>
+                        <div class="progress mt-1" style="height: 10px;">
+                            <div id="bant1Progress" class="progress-bar bg-info" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #2b3e50 !important;">
                 <div class="card-body">
                     <h5 class="card-title text-muted text-uppercase small font-weight-bold">Üretim Noktası (BANT-2)</h5>
@@ -47,6 +65,26 @@
         </div>
 
         <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #9b59b6 !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Üretim Noktası (BANT-3)</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="bant3Status">Beklemede</span>
+                        <span class="badge bg-secondary" id="bant3Badge">Normal</span>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">Malzeme Seviyesi:</small>
+                        <div class="progress mt-1" style="height: 10px;">
+                            <div id="bant3Progress" class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
             <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #18bc9c !important;">
                 <div class="card-body">
                     <h5 class="card-title text-muted text-uppercase small font-weight-bold">Etiket Depo Durumu</h5>
@@ -55,6 +93,50 @@
                         <div class="small text-muted" id="agvInfo">Aktif Görev Yok</div>
                     </div>
                     <span class="badge bg-light text-dark border w-100 text-start" id="depoLastAction">Son Hareket: Bekleniyor...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #f39c12 !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Vardiya & Organizasyon</h5>
+                    <div class="my-3">
+                        <div class="fw-bold fs-5">Aktif Vardiya: <span class="text-primary" id="activeShift">Gündüz Vardiyası</span></div>
+                        <small class="text-muted">Sorumlu Amirlik: Etiketleme Amirliği Nöbetçi Ekip</small>
+                    </div>
+                    <div class="p-2 bg-light rounded text-center small text-dark fw-bold" style="border: 1px dashed #f39c12;">
+                        Kesintisiz State-Transfer Aktif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #18bc9c !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Etiket Depo Durumu</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="depoStatus">Hazır</span>
+                        <div class="small text-muted" id="agvInfo">Aktif Görev Yok</div>
+                    </div>
+                    <span class="badge bg-light text-dark border w-100 text-start" id="depoLastAction">Son Hareket: Bekleniyor...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid #8e44ad !important;">
+                <div class="card-body">
+                    <h5 class="card-title text-muted text-uppercase small font-weight-bold">Mamül Depo (Akü Sevkiyat)</h5>
+                    <div class="d-flex justify-content-between align-items-center my-3">
+                        <span class="fs-4 fw-bold" id="mamulStatus" style="color: #8e44ad;">Beklemede</span>
+                        <div class="small text-muted" id="forkliftInfo"><i class="bi bi-truck text-muted"></i> Görev Yok</div>
+                    </div>
+                    <span class="badge bg-light text-dark border w-100 text-start" id="mamulLastAction">Son Rapor: Veri Bekleniyor...</span>
                 </div>
             </div>
         </div>
@@ -73,8 +155,9 @@
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
+    
     <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-sm">

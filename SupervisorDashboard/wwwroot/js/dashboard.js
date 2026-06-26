@@ -1,8 +1,35 @@
-// 1. Canlı Saat Güncelleme
+// 1. Canlı Saat ve Dinamik Vardiya Güncelleme (Otomatik Motor)
 setInterval(() => {
+    const now = new Date();
+    
+    // Saati Güncelle
     const liveClock = document.getElementById('liveClock');
     if (liveClock) {
-        liveClock.innerText = new Date().toLocaleString('tr-TR');
+        liveClock.innerText = now.toLocaleString('tr-TR');
+    }
+
+    // Vardiya Hesaplama Mantığı (0-24 Saat Formatı)
+    const currentHour = now.getHours();
+    let shiftName = "";
+    let shiftColorClass = "";
+
+    if (currentHour >= 8 && currentHour < 16) {
+        shiftName = "Gündüz Vardiyası";
+        shiftColorClass = "text-primary"; // Mavi
+    } else if (currentHour >= 16 && currentHour < 24) {
+        shiftName = "Akşam Vardiyası";
+        shiftColorClass = "text-warning"; // Turuncu/Sarı
+    } else {
+        shiftName = "Gece Vardiyası";
+        shiftColorClass = "text-info";    // Açık Mavi
+    }
+
+    // Ekrana Bas
+    const activeShiftElement = document.getElementById('activeShift');
+    if (activeShiftElement) {
+        activeShiftElement.innerText = shiftName;
+        // Vardiyaya göre metin rengini de dinamik değiştiriyoruz
+        activeShiftElement.className = shiftColorClass + " fw-bold";
     }
 }, 1000);
 
@@ -49,7 +76,7 @@ connection.on("ReceiveFactoryData", function (topic, payload) {
         progressBar.style.width = data.kalan_seviye_yuzde + "%";
         progressBar.className = "progress-bar bg-danger";
         
-        document.getElementById('activeShift').innerText = data.vardiya_id;
+        // Not: Otomatik saat motoru ile çakışmaması için data.vardiya_id ataması buradan kaldırıldı.
     } 
     else if (topic.includes("aksiyon")) {
         statusBadge = `<span class="badge bg-success">Lojistik Sevkiyat</span>`;
