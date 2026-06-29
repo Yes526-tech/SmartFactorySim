@@ -19,6 +19,13 @@ builder.Services.AddHostedService<MqttBackgroundWorker>();
 
 var app = builder.Build();
 
+// Veritabanının oluşturulduğundan emin ol (Kayıtların silinmesini engeller, sadece tablolar yoksa oluşturur)
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated();
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

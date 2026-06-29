@@ -4,6 +4,8 @@ using SupervisorDashboard.Models;
 using SupervisorDashboard.Data;
 using SupervisorDashboard.Hubs;
 using System.Text.Json;
+using MQTTnet;
+using MQTTnet.Client;
 
 namespace SupervisorDashboard.Controllers
 {
@@ -92,11 +94,33 @@ namespace SupervisorDashboard.Controllers
                     cikis_bolumu = yeniIslem.LokasyonNo ?? "DEPO"
                 });
 
+                var topic = $"fabrika/mamul_depo/sevkiyat/{yeniIslem.HedefBant?.ToLower().Replace("-", "")}";
+
                 await _hubContext.Clients.All.SendAsync(
                     "ReceiveFactoryData",
-                    $"mamul_depo/sevkiyat/{yeniIslem.HedefBant?.ToLower().Replace("-", "")}",
+                    topic,
                     payload
                 );
+
+                // MQTT'ye de gönder
+                try
+                {
+                    var mqttFactory = new MqttFactory();
+                    using var mqttClient = mqttFactory.CreateMqttClient();
+                    var options = new MqttClientOptionsBuilder()
+                        .WithTcpServer("127.0.0.1", 1883)
+                        .WithClientId($"DASHBOARD-PUB-{Guid.NewGuid()}")
+                        .Build();
+
+                    await mqttClient.ConnectAsync(options);
+                    var applicationMessage = new MqttApplicationMessageBuilder()
+                        .WithTopic(topic)
+                        .WithPayload(payload)
+                        .Build();
+                    await mqttClient.PublishAsync(applicationMessage);
+                    await mqttClient.DisconnectAsync();
+                }
+                catch { /* MQTT hatası kayıt işlemini engellemez */ }
             }
             catch { /* SignalR hatası kayıt işlemini engellemez */ }
 
