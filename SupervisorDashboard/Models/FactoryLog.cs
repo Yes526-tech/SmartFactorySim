@@ -7,15 +7,15 @@ namespace SupervisorDashboard.Models
         [Key]
         public int Id { get; set; }
         
-        // Verinin ne zaman oluştuğu
         public DateTime Timestamp { get; set; } = DateTime.Now;
-        
-        // MQTT konusu (Örn: fabrika/mamul_depo/sevkiyat)
         public string Topic { get; set; } = string.Empty;
+        
+        // YENİ EKLENEN: Hatanın sebebi olan Versiyon Sütunu
+        public string? Version { get; set; }
         
         // --- AKÜ SEVKİYAT ALANLARI ---
         public string? AkuTipi { get; set; }
-        public string? RafKonumu { get; set; } // Manuel girilen veri
+        public string? RafKonumu { get; set; }
         public string? HedefBant { get; set; }
         public string? ForkliftId { get; set; }
         

@@ -1,0 +1,117 @@
+@{
+    Layout = "_Layout"; 
+    ViewData["Title"] = "Mamül Depo İşlemleri";
+}
+
+
+@model IEnumerable<SupervisorDashboard.Models.MamulDepoIslem>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Mamül Depo İşlemleri</h4>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#yeniEkleModal">
+            + Yeni İşlem Ekle
+        </button>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <table class="table table-hover table-bordered mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Stok Kodu</th>
+                        <th>Açıklama</th>
+                        <th>Lokasyon</th>
+                        <th>Ülke Seri No</th>
+                        <th>Hedef Bant</th>
+                        <th>Durum</th>
+                        <th>İşlem Zamanı</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.StokKodu</td>
+                                <td>@item.MalzemeAciklamasi</td>
+                                <td>@item.LokasyonNo</td>
+                                <td><strong>@item.UlkeSeriNo</strong></td>
+                                <td><span class="badge bg-primary">@item.HedefBant</span></td>
+                                <td>@item.IslemDurumu</td>
+                                <td>@item.IslemZamani.ToString("dd.MM.yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Henüz kayıt bulunmamaktadır.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="yeniEkleModal" tabindex="-1" aria-labelledby="modalBaslik" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="modalBaslik">Yeni Mamül Depo İşlemi Ekle</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <form asp-controller="MamulDepo" asp-action="Ekle" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Stok Kodu</label>
+                            <input type="text" name="StokKodu" class="form-control" placeholder="Örn: 516T46077" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Malzeme Açıklaması</label>
+                            <input type="text" name="MalzemeAciklamasi" class="form-control" placeholder="Örn: C-225-AH-MF..." required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Lokasyon No</label>
+                            <input type="text" name="LokasyonNo" class="form-control" placeholder="Örn: A59" required />
+                        </div>
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Lokasyon Adı</label>
+                            <input type="text" name="LokasyonAdi" class="form-control" placeholder="Örn: ETİKETSİZ ŞARJLI AKÜ DEPO" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Lot / Grup No</label>
+                            <input type="text" name="LotGrupNo" class="form-control" placeholder="Örn: 192127-*-*" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Ülke Seri No</label>
+                            <input type="text" name="UlkeSeriNo" class="form-control" placeholder="Örn: JPY4459" required />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Hedef Üretim Bandı</label>
+                            <select name="HedefBant" class="form-select" required>
+                                <option value="">Seçiniz...</option>
+                                <option value="BANT-1">BANT-1</option>
+                                <option value="BANT-2">BANT-2</option>
+                                <option value="BANT-3">BANT-3</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-success">Veritabanına Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

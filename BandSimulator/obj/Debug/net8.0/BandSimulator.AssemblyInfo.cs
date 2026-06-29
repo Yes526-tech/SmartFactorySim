@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BandSimulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bfd64c8cde74921640499dfba660449142ce4db")]
 [assembly: System.Reflection.AssemblyProductAttribute("BandSimulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BandSimulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -15,3 +15,4 @@
 /Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.pdb
 /Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.genruntimeconfig.cache
 /Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/ref/BandSimulator.dll
+/Users/yes-macbook/Desktop/SmartFactorySim/BandSimulator/obj/Debug/net8.0/BandSimulator.sourcelink.json

@@ -1,4 +1,4 @@
-﻿@page
+@page
 @model IndexModel
 @{
     Layout = null; 
@@ -23,9 +23,22 @@
             <p class="text-muted m-0">Fabrika anlık etiketleme, depo ve hammadde senkronizasyon radarı</p>
         </div>
         <div class="text-end">
-            <span class="badge bg-success px-3 py-2 fs-6" id="systemStatus">Sistem Çevrimiçi</span>
-            <div class="text-muted small mt-1" id="liveClock">Yükleniyor...</div>
-        </div>
+            <div class="d-flex align-items-center justify-content-end gap-2">
+                
+                <button class="btn btn-outline-success d-flex align-items-center px-3 py-2 fs-6" style="font-weight: bold; border-radius: 0.375rem;" onclick="showReportModal()">
+                    <i class="bi bi-pencil-square me-1"></i> Manuel Rapor
+                </button>
+                
+                <a href="/MamulDepo" class="btn d-flex align-items-center px-3 py-2 fs-6" style="background-color: #8e44ad; color: #fff; font-weight: bold; border-radius: 0.375rem;">
+                    <i class="bi bi-archive-fill me-1"></i> Mamül Depo
+                </a>
+
+                <span class="badge bg-success d-flex align-items-center px-3 py-2 fs-6" id="systemStatus" style="font-weight: bold; border-radius: 0.375rem;">
+                    Sistem Çevrimiçi
+                </span>
+            </div>
+            <div class="text-muted small mt-2" id="liveClock">Yükleniyor...</div>
+        </div>  
     </div>
 
     <div class="row g-3 mb-4">
@@ -42,8 +55,11 @@
                             <div id="progress_BANT-1" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
                         </div>
                     </div>
-                    <div class="mt-3 pt-2 border-top text-muted" style="font-size: 0.8rem;" id="logistic_BANT-1">
-                        <i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold">Yok</span>
+                    <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center" style="font-size: 0.8rem;" id="logistic_BANT-1">
+                        <span class="text-muted"><i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold" id="akis_BANT-1">Yükleniyor...</span></span>
+                        <button class="btn btn-xs btn-outline-primary py-0 px-2" style="font-size:0.75rem;" id="detayBtn_BANT-1" onclick="bantDetayGoster('BANT-1')" hidden>
+                            <i class="bi bi-search me-1"></i>Detay
+                        </button>
                     </div>
                 </div>
             </div>
@@ -62,8 +78,11 @@
                             <div id="progress_BANT-2" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
                         </div>
                     </div>
-                    <div class="mt-3 pt-2 border-top text-muted" style="font-size: 0.8rem;" id="logistic_BANT-2">
-                        <i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold">Yok</span>
+                    <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center" style="font-size: 0.8rem;" id="logistic_BANT-2">
+                        <span class="text-muted"><i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold" id="akis_BANT-2">Yükleniyor...</span></span>
+                        <button class="btn btn-xs btn-outline-primary py-0 px-2" style="font-size:0.75rem;" id="detayBtn_BANT-2" onclick="bantDetayGoster('BANT-2')" hidden>
+                            <i class="bi bi-search me-1"></i>Detay
+                        </button>
                     </div>
                 </div>
             </div>
@@ -82,8 +101,11 @@
                             <div id="progress_BANT-3" class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
                         </div>
                     </div>
-                    <div class="mt-3 pt-2 border-top text-muted" style="font-size: 0.8rem;" id="logistic_BANT-3">
-                        <i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold">Yok</span>
+                    <div class="mt-3 pt-2 border-top d-flex justify-content-between align-items-center" style="font-size: 0.8rem;" id="logistic_BANT-3">
+                        <span class="text-muted"><i class="bi bi-box-seam me-1"></i> Lojistik Akış: <span class="fw-bold" id="akis_BANT-3">Yükleniyor...</span></span>
+                        <button class="btn btn-xs btn-outline-primary py-0 px-2" style="font-size:0.75rem;" id="detayBtn_BANT-3" onclick="bantDetayGoster('BANT-3')" hidden>
+                            <i class="bi bi-search me-1"></i>Detay
+                        </button>
                     </div>
                 </div>
             </div>
@@ -174,6 +196,61 @@
     </div>
 </div>
 
+<div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header text-white" style="background-color: #27ae60;">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-clipboard-check me-2"></i>Manuel Akü Sevkiyat Raporu
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <form id="manuelRaporFormu">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted small">Sistem Versiyonu</label>
+                        <input type="text" id="versionInput" class="form-control bg-light text-muted" value="9.000" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small">Sevk Edilecek Akü Tipi</label>
+                        <select id="akuTipiSelect" class="form-select border-secondary">
+                            <option value="" selected disabled>Lütfen akü çeşidini seçin...</option>
+                            <option value="12V 60Ah Starter Akü">12V 60Ah Starter Akü</option>
+                            <option value="12V 72Ah AGM Akü">12V 72Ah AGM Akü</option>
+                            <option value="12V 90Ah Marin Akü">12V 90Ah Marin Akü</option>
+                            <option value="12V 105Ah Solar Akü">12V 105Ah Solar Akü</option>
+                            <option value="12V 45Ah Dar Tip Akü">12V 45Ah Dar Tip Akü</option>
+                            <option value="24V 100Ah Traksiyoner">24V 100Ah Traksiyoner</option>
+                            <option value="12V 60Ah EFB Akü">12V 60Ah EFB Akü</option>
+                            <option value="12V 135Ah Ağır Vasıta">12V 135Ah Ağır Vasıta</option>
+                            <option value="12V 200Ah Telekom Aküsü">12V 200Ah Telekom Aküsü</option>
+                            <option value="12V 55Ah Standart Akü">12V 55Ah Standart Akü</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small">Alındığı Raf Konumu</label>
+                        <input type="text" id="rafKonumuInput" class="form-control border-secondary" placeholder="Örn: A-Blok, Raf-05">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-dark small">Hedef Üretim Bandı</label>
+                        <select id="hedefBantSelect" class="form-select border-secondary">
+                            <option value="BANT-1">BANT-1</option>
+                            <option value="BANT-2">BANT-2</option>
+                            <option value="BANT-3">BANT-3</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="button" class="btn btn-success fw-bold" onclick="saveManualReport()">
+                    <i class="bi bi-save me-1"></i> Sisteme Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow-lg">
@@ -205,9 +282,130 @@
     </div>
 </div>
 
+<div class="modal fade" id="bantDetayModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header text-white" style="background-color: #8e44ad;">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-lightning-charge-fill me-2"></i>
+                    <span id="bantDetayBaslik">Bant Akü Detayları</span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div id="bantDetayYukleniyor" class="text-center py-5 text-muted">
+                    <div class="spinner-border text-secondary mb-2" role="status"></div>
+                    <div>Veriler yükleniyor...</div>
+                </div>
+                <div id="bantDetayIcerik" style="display:none;">
+                    <table class="table table-hover table-bordered mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Stok Kodu</th>
+                                <th>Açıklama (Akü Tipi)</th>
+                                <th>Lokasyon</th>
+                                <th>Ülke Seri No</th>
+                                <th>Durum</th>
+                                <th>İşlem Zamanı</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bantDetayTablo"></tbody>
+                    </table>
+                </div>
+                <div id="bantDetayBos" class="text-center py-5 text-muted" style="display:none;">
+                    <i class="bi bi-inbox display-4 d-block mb-2 text-light"></i>
+                    Bu bant için henüz kayıtlı akü işlemi bulunmuyor.
+                </div>
+            </div>
+            <div class="modal-footer bg-light d-flex justify-content-between">
+                <a id="bantDetayLink" href="/MamulDepo" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> Mamül Depo'ya Git
+                </a>
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/dashboard.js"></script>
+
+<script>
+// ===== BANT LOJİSTİK AKIŞ: Sayfa açılınca DB'den çek =====
+function bantAkisGuncelle(bant) {
+    fetch(`/MamulDepo/BantIslemleri?bant=${encodeURIComponent(bant)}`)
+        .then(r => r.json())
+        .then(data => {
+            const akisEl = document.getElementById(`akis_${bant}`);
+            const detayBtn = document.getElementById(`detayBtn_${bant}`);
+            if (!akisEl) return;
+
+            if (data && data.length > 0) {
+                akisEl.innerHTML = `<span class="text-success fw-bold"><i class="bi bi-lightning-charge-fill me-1"></i>VAR (${data.length} Akü)</span>`;
+                if (detayBtn) detayBtn.removeAttribute('hidden');
+            } else {
+                akisEl.innerHTML = `<span class="text-muted">Yok</span>`;
+                if (detayBtn) detayBtn.setAttribute('hidden', '');
+            }
+        })
+        .catch(() => {
+            const akisEl = document.getElementById(`akis_${bant}`);
+            if (akisEl) akisEl.innerHTML = `<span class="text-muted">—</span>`;
+        });
+}
+
+// Sayfa yüklenince tüm bantları sorgula
+['BANT-1', 'BANT-2', 'BANT-3'].forEach(bantAkisGuncelle);
+
+// ===== BANT DETAY MODAL =====
+window.bantDetayGoster = function(bant) {
+    document.getElementById('bantDetayBaslik').innerText = `${bant} — Akü ve İşlem Listesi`;
+    document.getElementById('bantDetayYukleniyor').style.display = '';
+    document.getElementById('bantDetayIcerik').style.display = 'none';
+    document.getElementById('bantDetayBos').style.display = 'none';
+
+    const modal = new bootstrap.Modal(document.getElementById('bantDetayModal'));
+    modal.show();
+
+    fetch(`/MamulDepo/BantIslemleri?bant=${encodeURIComponent(bant)}`)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('bantDetayYukleniyor').style.display = 'none';
+            const tablo = document.getElementById('bantDetayTablo');
+            tablo.innerHTML = '';
+
+            if (!data || data.length === 0) {
+                document.getElementById('bantDetayBos').style.display = '';
+                return;
+            }
+
+            data.forEach(item => {
+                const durumBadge = item.islemDurumu === 'Beklemede'
+                    ? `<span class="badge bg-warning text-dark">${item.islemDurumu}</span>`
+                    : `<span class="badge bg-success">${item.islemDurumu}</span>`;
+
+                tablo.innerHTML += `
+                    <tr>
+                        <td><code class="text-primary">${item.stokKodu || '—'}</code></td>
+                        <td class="fw-semibold">${item.malzemeAciklamasi || '—'}</td>
+                        <td><span class="badge bg-secondary">${item.lokasyonNo || '—'}</span></td>
+                        <td><strong>${item.ulkeSeriNo || '—'}</strong></td>
+                        <td>${durumBadge}</td>
+                        <td class="text-muted small">${item.islemZamani}</td>
+                    </tr>`;
+            });
+
+            document.getElementById('bantDetayIcerik').style.display = '';
+        });
+};
+
+// ===== SignalR: Yeni işlem eklenince bantları otomatik güncelle =====
+document.addEventListener('mamulDepoYeniIslem', function(e) {
+    const bant = e.detail && e.detail.hedef_bant;
+    if (bant) bantAkisGuncelle(bant);
+});
+</script>
 
 </body>
 </html>

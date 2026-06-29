@@ -150,11 +150,17 @@ connection.on("ReceiveFactoryData", function (topic, payload) {
                 document.getElementById(`status_${targetBant}`).className = "fs-4 fw-bold text-success";
                 document.getElementById(`progress_${targetBant}`).className = "progress-bar bg-success";
                 document.getElementById(`progress_${targetBant}`).style.width = "100%";
-                document.getElementById(`logistic_${targetBant}`).innerHTML = `<i class="bi bi-check-circle-fill text-success me-1"></i> Aküler hatta teslim edildi.`;
+                document.getElementById(`logistic_${targetBant}`).querySelector(`#akis_${targetBant}`) &&
+                    (document.getElementById(`akis_${targetBant}`).innerHTML = `<span class="text-success fw-bold"><i class="bi bi-check-circle-fill me-1"></i>Teslim Edildi</span>`);
                 document.getElementById('mamulStatus').innerText = "TESLİM EDİLDİ";
                 document.getElementById('mamulStatus').style.color = "#27ae60";
             }
         }, 4000);
+
+        // Bant akış widget'ını anlık güncelle (Pages/Index.cshtml'deki bantAkisGuncelle'yi tetikle)
+        document.dispatchEvent(new CustomEvent('mamulDepoYeniIslem', { detail: data }));
+        // Eğer bantAkisGuncelle global scope'ta tanımlıysa direkt çağır
+        if (typeof bantAkisGuncelle === 'function') bantAkisGuncelle(targetBant);
     }
 
     // Tablo Satır İçeriğini Bas
@@ -257,4 +263,94 @@ window.showShiftTeam = function() {
 // Bağlantıyı başlat
 connection.start().catch(function (err) {
     return console.error(err.toString());
+});
+
+window.showReportModal = function() {
+    const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+    modal.show();
+};
+
+window.saveManualReport = function() {
+    // Form verilerini topla
+    const akuTipi = document.getElementById('akuTipiSelect').value;
+    const rafKonumu = document.getElementById('rafKonumuInput').value;
+    const hedefBant = document.getElementById('hedefBantSelect').value;
+
+    if(!akuTipi || !rafKonumu) {
+        alert("Lütfen akü tipini ve raf konumunu eksiksiz girin!");
+        return;
+    }
+
+    // API'ye gönderilecek JSON Paketi
+    const payload = {
+        akuTipi: akuTipi,
+        rafKonumu: rafKonumu,
+        hedefBant: hedefBant
+    };
+
+    // Arka uca (LogController) POST isteği at
+    fetch('/api/log', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if(response.ok) {
+            // Modalı gizle ve formu temizle
+            const modal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
+            modal.hide();
+            document.getElementById('manuelRaporFormu').reset();
+
+            // Başarılı kaydı canlı tabloya yeşil satır olarak ekle
+            const noDataRow = document.getElementById('noDataRow');
+            if (noDataRow) noDataRow.remove();
+
+            const tableBody = document.getElementById('logTableBody');
+            const row = tableBody.insertRow(0);
+            const now = new Date().toLocaleTimeString('tr-TR');
+            
+            row.innerHTML = `
+                <td><strong class="text-secondary">${now}</strong></td>
+                <td><span class="font-monospace text-success small">fabrika/mamul_depo/manuel_rapor</span></td>
+                <td><span class="badge bg-success">Manuel Kayıt (v9.000)</span></td>
+                <td>${hedefBant} hattına ${rafKonumu} rafından ${akuTipi} sevk edildi.</td>
+            `;
+        } else {
+            alert("Veritabanına kaydedilirken bir hata oluştu.");
+        }
+    })
+    .catch(error => console.error("Hata:", error));
+};
+
+// Sayfa yüklendiğinde veritabanındaki geçmiş kayıtları tabloya çek
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/api/log')
+        .then(response => response.json())
+        .then(data => {
+            if(data && data.length > 0) {
+                const noDataRow = document.getElementById('noDataRow');
+                if (noDataRow) noDataRow.remove();
+
+                const tableBody = document.getElementById('logTableBody');
+                
+                // Gelen her bir veritabanı kaydı için tabloya satır ekle
+                data.forEach(log => {
+                    const row = tableBody.insertRow();
+                    const logTime = new Date(log.timestamp).toLocaleTimeString('tr-TR');
+                    
+                    let statusBadge = `<span class="badge bg-success">Manuel Kayıt (v${log.version || "9.000"})</span>`;
+                    let islemMetni = `${log.hedefBant} hattına ${log.rafKonumu} rafından ${log.akuTipi} sevk edildi.`;
+
+                    row.innerHTML = `
+                        <td><strong class="text-secondary">${logTime}</strong></td>
+                        <td><span class="font-monospace text-success small">${log.topic}</span></td>
+                        <td>${statusBadge}</td>
+                        <td>${islemMetni}</td>
+                    `;
+                });
+            }
+        })
+        .catch(err => console.error("Geçmiş loglar çekilemedi:", err));
 });

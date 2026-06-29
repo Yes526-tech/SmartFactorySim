@@ -1,22 +1,23 @@
 using Microsoft.EntityFrameworkCore;
-using SupervisorDashboard.Data; // AppDbContext bu klasörün içinde olduğu için bu şart!
+using SupervisorDashboard.Data;
 using SupervisorDashboard.Hubs;
 using SupervisorDashboard.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Gerekli Servisleri Kaydet
-builder.Services.AddRazorPages();
-builder.Services.AddSignalR(); // SignalR eklendi
-builder.Services.AddHostedService<MqttBackgroundWorker>(); // Arka plan işçimiz eklendi
+builder.Services.AddRazorPages();          
+builder.Services.AddControllersWithViews(); 
+builder.Services.AddControllers();         
+builder.Services.AddSignalR();
 
-// Veritabanı bağlantısı (SQLite kullanıyoruz)
+// --- KRİTİK DÜZELTME: Sadece SQLite bağlantısı kalmalı ---
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite("Data Source=factory.db"));
 
+builder.Services.AddHostedService<MqttBackgroundWorker>();
+
 var app = builder.Build();
-
-
 
 if (!app.Environment.IsDevelopment())
 {
@@ -26,12 +27,20 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 app.UseAuthorization();
 
+// 2. Razor Pages
 app.MapRazorPages();
+app.MapControllers();
 
-// 2. JavaScript'in bağlanacağı SignalR endpoint yolunu tanımla
+// 3. MVC Route
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=MamulDepo}/{action=Index}/{id?}");
+
+// 4. SignalR endpoint
 app.MapHub<FactoryHub>("/factoryHub");
 
 app.Run();
