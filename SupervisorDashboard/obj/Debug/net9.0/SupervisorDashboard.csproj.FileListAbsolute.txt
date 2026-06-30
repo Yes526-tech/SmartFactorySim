@@ -163,7 +163,6 @@
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/SupervisorDashboard.MvcApplicationPartsAssemblyInfo.cache
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/SupervisorDashboard.sourcelink.json
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/scopedcss/bundle/SupervisorDashboard.styles.css
-/Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/txanjis5xl-b9sayid5wm.gz
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/5nxsmg2eto-61n19gt1b8.gz
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/8gn576ivvi-xtxxf3hu2r.gz
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/0c7xbyh41y-bqjiyaj88i.gz
@@ -241,4 +240,5 @@
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/scopedcss/projectbundle/SupervisorDashboard.bundle.scp.css
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/vryv2w9m9w-rg6h7z0zh7.gz
 /Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/jlwz966yji-rg6h7z0zh7.gz
-/Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/557fe59nor-rgcwpgi01o.gz
+/Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/txanjis5xl-m046d3sghj.gz
+/Users/yes-macbook/Desktop/SmartFactorySim/SupervisorDashboard/obj/Debug/net9.0/compressed/557fe59nor-857z8qt514.gz

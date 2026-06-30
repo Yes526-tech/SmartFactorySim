@@ -1,0 +1,78 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Bant Yönetimi";
+}
+
+@model IEnumerable<SupervisorDashboard.Models.MamulDepoIslem>
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0 text-dark fw-bold"><i class="bi bi-gear-fill me-2 text-primary"></i>Bant Yönetimi (Üretim Onayı)</h4>
+    </div>
+
+    <div class="card shadow-sm border-0" style="border-top: 4px solid #3498db !important;">
+        <div class="card-body">
+            <h6 class="text-muted mb-4"><i class="bi bi-clock-history me-1"></i> Mamül depodan sevk edilip üretime girmeyi bekleyen aküler</h6>
+            
+            <table class="table table-hover table-bordered align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 15%">Stok Kodu</th>
+                        <th style="width: 25%">Akü Tipi</th>
+                        <th style="width: 15%">Ülke Seri No</th>
+                        <th style="width: 15%">Hedef Bant</th>
+                        <th style="width: 15%">Bekleme Süresi</th>
+                        <th style="width: 15%" class="text-center">İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            var beklemeSuresi = (DateTime.Now - item.IslemZamani);
+                            var beklemeMetni = $"{(int)beklemeSuresi.TotalMinutes} dk önce";
+                            
+                            <tr>
+                                <td><code class="text-primary fs-6">@item.StokKodu</code></td>
+                                <td class="fw-semibold">@item.MalzemeAciklamasi</td>
+                                <td><strong>@item.UlkeSeriNo</strong></td>
+                                <td><span class="badge bg-primary fs-6">@item.HedefBant</span></td>
+                                <td class="text-muted"><i class="bi bi-clock me-1"></i>@beklemeMetni</td>
+                                <td class="text-center">
+                                    @if(item.IslemDurumu == "Beklemede")
+                                    {
+                                        <form asp-controller="Bant" asp-action="Onayla" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success fw-bold w-100 shadow-sm">
+                                                <i class="bi bi-play-circle-fill me-1"></i> Üretime Başla
+                                            </button>
+                                        </form>
+                                    }
+                                    else if(item.IslemDurumu == "Üretiliyor")
+                                    {
+                                        <form asp-controller="Bant" asp-action="Iptal" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger fw-bold w-100 shadow-sm">
+                                                <i class="bi bi-stop-circle-fill me-1"></i> Üretimi İptal Et
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-5">
+                                <i class="bi bi-inbox display-4 d-block mb-3 text-light"></i>
+                                Onay bekleyen herhangi bir akü sevkiyatı bulunmuyor.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

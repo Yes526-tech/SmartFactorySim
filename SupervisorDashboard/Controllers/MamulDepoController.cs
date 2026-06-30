@@ -41,7 +41,8 @@ namespace SupervisorDashboard.Controllers
                     x.LokasyonNo,
                     x.UlkeSeriNo,
                     x.IslemDurumu,
-                    IslemZamani = x.IslemZamani.ToString("dd.MM.yyyy HH:mm")
+                    x.Miktar,
+                    IslemZamani = x.IslemZamani.ToString("yyyy-MM-ddTHH:mm:ss")
                 })
                 .ToList();
 
@@ -67,15 +68,14 @@ namespace SupervisorDashboard.Controllers
             return Json(ozet);
         }
 
-        // Modal İçindeki Formdan Gelen Veriyi Yakalama + SignalR Bildirimi
+        // Modal İçindeki Formdan Gelen Veriyi Yakalama + SignalR Bildirimi (Etiket Depo Siparişi)
         [HttpPost]
         public async Task<IActionResult> Ekle(MamulDepoIslem yeniIslem)
         {
             // DB Kaydı - her zaman yapılır (ModelState bağımsız)
             yeniIslem.UlkeSeriNo = yeniIslem.UlkeSeriNo?.ToUpper();
             yeniIslem.IslemZamani = DateTime.Now;
-            if (string.IsNullOrEmpty(yeniIslem.IslemDurumu))
-                yeniIslem.IslemDurumu = "Beklemede";
+            yeniIslem.IslemDurumu = "Etiket Bekliyor"; // Sürecin en başı
 
             _context.MamulDepoIslemleri.Add(yeniIslem);
             _context.SaveChanges();
@@ -84,17 +84,53 @@ namespace SupervisorDashboard.Controllers
             try
             {
                 var payload = JsonSerializer.Serialize(new {
+                    islem_id = yeniIslem.Id,
                     hedef_bant = yeniIslem.HedefBant,
                     stok_kodu = yeniIslem.StokKodu,
                     aku_tipi = yeniIslem.MalzemeAciklamasi,
                     ulke_seri_no = yeniIslem.UlkeSeriNo,
                     lokasyon = yeniIslem.LokasyonNo,
                     islem_durumu = yeniIslem.IslemDurumu,
-                    forklift_id = "FRK-MANUEL",
-                    cikis_bolumu = yeniIslem.LokasyonNo ?? "DEPO"
+                    miktar = yeniIslem.Miktar,
+                    zaman = DateTime.Now.ToString("HH:mm:ss")
                 });
 
-                var topic = $"fabrika/mamul_depo/sevkiyat/{yeniIslem.HedefBant?.ToLower().Replace("-", "")}";
+                var topic = "fabrika/etiket_depo/siparis";
+
+                await _hubContext.Clients.All.SendAsync(
+                    "ReceiveFactoryData",
+                    topic,
+                    payload
+                );
+            }
+            catch { /* SignalR hatası kayıt işlemini engellemez */ }
+
+            return RedirectToAction("Index");
+        }
+
+        // Mamül Depo'nun Siparişi Banta Göndermesi (Sevkiyata Hazır)
+        [HttpPost]
+        public async Task<IActionResult> SevkiyatOnay(int id)
+        {
+            var islem = await _context.MamulDepoIslemleri.FindAsync(id);
+            if (islem != null && islem.IslemDurumu == "Etiket Bekliyor")
+            {
+                islem.IslemDurumu = "Beklemede"; // Artık bantta bekliyor
+                await _context.SaveChangesAsync();
+
+                var payload = JsonSerializer.Serialize(new {
+                    hedef_bant = islem.HedefBant,
+                    stok_kodu = islem.StokKodu,
+                    aku_tipi = islem.MalzemeAciklamasi,
+                    ulke_seri_no = islem.UlkeSeriNo,
+                    lokasyon = islem.LokasyonNo,
+                    islem_durumu = islem.IslemDurumu,
+                    miktar = islem.Miktar,
+                    forklift_id = "FRK-MANUEL",
+                    cikis_bolumu = islem.LokasyonNo ?? "DEPO"
+                });
+
+                var topic = $"fabrika/mamul_depo/sevkiyat/{islem.HedefBant?.ToLower().Replace("-", "")}";
 
                 await _hubContext.Clients.All.SendAsync(
                     "ReceiveFactoryData",
@@ -102,14 +138,14 @@ namespace SupervisorDashboard.Controllers
                     payload
                 );
 
-                // MQTT'ye de gönder
+                // MQTT Publish (Aynı Orijinal Ekle kodundaki gibi)
                 try
                 {
                     var mqttFactory = new MqttFactory();
                     using var mqttClient = mqttFactory.CreateMqttClient();
                     var options = new MqttClientOptionsBuilder()
                         .WithTcpServer("127.0.0.1", 1883)
-                        .WithClientId($"DASHBOARD-PUB-{Guid.NewGuid()}")
+                        .WithClientId($"MAMULDEPO-PUB-{Guid.NewGuid()}")
                         .Build();
 
                     await mqttClient.ConnectAsync(options);
@@ -120,10 +156,8 @@ namespace SupervisorDashboard.Controllers
                     await mqttClient.PublishAsync(applicationMessage);
                     await mqttClient.DisconnectAsync();
                 }
-                catch { /* MQTT hatası kayıt işlemini engellemez */ }
+                catch { }
             }
-            catch { /* SignalR hatası kayıt işlemini engellemez */ }
-
             return RedirectToAction("Index");
         }
     }

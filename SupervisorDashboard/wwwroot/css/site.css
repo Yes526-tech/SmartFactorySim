@@ -29,3 +29,26 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1) !important;
+}
+
+.offcanvas-body::-webkit-scrollbar {
+  width: 6px;
+}
+.offcanvas-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.offcanvas-body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+.offcanvas-body::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}

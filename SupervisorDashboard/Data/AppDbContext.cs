@@ -11,7 +11,7 @@ namespace SupervisorDashboard.Data
         public DbSet<FactoryLog> FactoryLogs { get; set; }
 
         public DbSet<MamulDepoIslem> MamulDepoIslemleri { get; set; }
-    // İleride etiket depo için de benzer şekilde eklenebilir.
 
+        public DbSet<EtiketDepoIslem> EtiketDepoIslemleri { get; set; }
     }
 }

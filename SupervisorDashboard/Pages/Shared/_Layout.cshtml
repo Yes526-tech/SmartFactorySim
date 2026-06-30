@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,37 +11,124 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">SupervisorDashboard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-4" style="height: 65px;">
+            <div class="container-fluid px-4">
+                <!-- Hamburger Menu Button -->
+                <button class="btn btn-outline-secondary border-0 me-3 shadow-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas" style="font-size: 1.2rem;">
+                    <i class="bi bi-list"></i>
+                </button>
+                
+                <a class="navbar-brand fw-bold text-dark d-flex align-items-center" asp-area="" asp-page="/Index">
+                    <i class="bi bi-cpu-fill text-primary me-2" style="font-size: 1.5rem;"></i>
+                    <span style="letter-spacing: -0.5px;">SmartFactory<span class="text-primary">Sim</span></span>
+                </a>
+
+                <button class="navbar-toggler shadow-none border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item d-flex align-items-center me-3">
+                            <span class="badge bg-light text-dark border px-3 py-2 fw-bold" style="font-size:0.8rem;"><i class="bi bi-person-circle me-1"></i> Supervisor: Admin</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <!-- Offcanvas Sidebar -->
+    <div class="offcanvas offcanvas-start shadow" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel" style="width: 320px; border-right: none;">
+        <div class="offcanvas-header bg-dark text-white" style="border-bottom: 3px solid #3498db;">
+            <h5 class="offcanvas-title fw-bold d-flex align-items-center" id="sidebarOffcanvasLabel">
+                <i class="bi bi-grid-1x2-fill me-2 text-info"></i> Ana Menü
+            </h5>
+            <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0 d-flex flex-column bg-light">
+            
+            <!-- Navigation Links -->
+            <div class="p-3">
+                <p class="text-muted small fw-bold text-uppercase mb-2" style="letter-spacing: 0.5px;">Yönetim Panelleri</p>
+                <div class="nav flex-column nav-pills gap-2">
+                    <a href="/" class="nav-link bg-white text-dark border shadow-sm fw-bold d-flex align-items-center py-2 px-3 hover-lift">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="bi bi-speedometer2 fs-5"></i>
+                        </div>
+                        Canlı Dashboard
+                    </a>
+                    <a href="/Bant" class="nav-link bg-white text-dark border shadow-sm fw-bold d-flex align-items-center py-2 px-3 hover-lift">
+                        <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="bi bi-gear-wide-connected fs-5"></i>
+                        </div>
+                        Bant Yönetimi
+                    </a>
+                    <a href="/MamulDepo" class="nav-link bg-white text-dark border shadow-sm fw-bold d-flex align-items-center py-2 px-3 hover-lift">
+                        <div class="bg-warning bg-opacity-10 text-warning rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="bi bi-boxes fs-5"></i>
+                        </div>
+                        Mamül Depo (Akü)
+                    </a>
+                    
+                    <p class="text-muted small fw-bold text-uppercase mb-1 mt-2" style="letter-spacing: 0.5px;">Detaylı Raporlar</p>
+                    
+                    <a href="/EtiketDepo" class="nav-link bg-white text-dark border shadow-sm fw-bold d-flex align-items-center py-2 px-3 hover-lift">
+                        <div class="bg-danger bg-opacity-10 text-danger rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="bi bi-tags-fill fs-5"></i>
+                        </div>
+                        Etiket Sevkiyatları
+                    </a>
+                    
+                    <a href="/OnaylananUretimler" class="nav-link bg-white text-dark border shadow-sm fw-bold d-flex align-items-center py-2 px-3 hover-lift">
+                        <div class="bg-success bg-opacity-10 text-success rounded p-2 me-3 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                            <i class="bi bi-check-circle-fill fs-5"></i>
+                        </div>
+                        Onaylanan Üretimler
+                    </a>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr class="my-1 border-secondary opacity-25">
+
+            <!-- Recent Actions / Summary -->
+            <div class="p-3 flex-grow-1 overflow-auto">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p class="text-muted small fw-bold text-uppercase mb-0" style="letter-spacing: 0.5px;">Son İşlem Özetleri</p>
+                    <span class="badge bg-secondary rounded-pill" style="font-size: 0.65rem;" id="sidebarLogCount">0</span>
+                </div>
+                
+                <div id="sidebarLogList" class="d-flex flex-column gap-2">
+                    <div class="text-center text-muted my-4" id="sidebarEmptyState">
+                        <i class="bi bi-clock-history fs-2 text-light mb-2"></i>
+                        <p class="small fw-bold mb-0">Henüz bir işlem kaydedilmedi.</p>
+                        <small style="font-size: 0.7rem;">Sistem logları bekleniyor...</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar Footer -->
+            <div class="mt-auto p-3 bg-white border-top text-center text-muted" style="font-size: 0.75rem;">
+                <i class="bi bi-shield-check text-success me-1"></i> Sistem durumu stabil
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - SupervisorDashboard - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <footer class="border-top footer text-muted mt-4 bg-white">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <span>&copy; 2026 - SmartFactorySim v2.1</span>
+                <a asp-area="" asp-page="/Privacy" class="text-decoration-none text-primary fw-bold">Gizlilik Politikası</a>
+            </div>
         </div>
     </footer>
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

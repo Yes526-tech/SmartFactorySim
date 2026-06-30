@@ -34,6 +34,9 @@ public class MamulDepoIslem
     [Column("islem_durumu")]
     public string? IslemDurumu { get; set; } = "Beklemede";
 
+    [Column("miktar")]
+    public int Miktar { get; set; } = 500;
+
     [Column("islem_zamani")]
     public DateTime IslemZamani { get; set; } = DateTime.Now;
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DepotSimulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c02e7e4e243f1a2fb1c89ee532f14996d761fcc9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8d3326cae8136089b349ceebbeb05b8855b53212")]
 [assembly: System.Reflection.AssemblyProductAttribute("DepotSimulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DepotSimulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

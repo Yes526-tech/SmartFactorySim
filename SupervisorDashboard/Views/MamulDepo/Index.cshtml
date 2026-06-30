@@ -24,8 +24,10 @@
                         <th>Lokasyon</th>
                         <th>Ülke Seri No</th>
                         <th>Hedef Bant</th>
+                        <th>Miktar</th>
                         <th>Durum</th>
                         <th>İşlem Zamanı</th>
+                        <th>İşlemler</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,8 +41,29 @@
                                 <td>@item.LokasyonNo</td>
                                 <td><strong>@item.UlkeSeriNo</strong></td>
                                 <td><span class="badge bg-primary">@item.HedefBant</span></td>
-                                <td>@item.IslemDurumu</td>
+                                <td>@item.Miktar Adet</td>
+                                <td>
+                                    @if(item.IslemDurumu == "Etiket Bekliyor")
+                                    {
+                                        <span class="badge bg-secondary text-white">@item.IslemDurumu</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">@item.IslemDurumu</span>
+                                    }
+                                </td>
                                 <td>@item.IslemZamani.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>
+                                    @if(item.IslemDurumu == "Etiket Bekliyor")
+                                    {
+                                        <form asp-controller="MamulDepo" asp-action="SevkiyatOnay" method="post" class="d-inline">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-success fw-bold">
+                                                <i class="bi bi-truck me-1"></i> Sevkiyata Hazır
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
                             </tr>
                         }
                     }
@@ -88,15 +111,19 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label">Lot / Grup No</label>
                             <input type="text" name="LotGrupNo" class="form-control" placeholder="Örn: 192127-*-*" />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Akü Adedi (Miktar)</label>
+                            <input type="number" name="Miktar" class="form-control" value="500" required />
+                        </div>
+                        <div class="col-md-3 mb-3">
                             <label class="form-label">Ülke Seri No</label>
                             <input type="text" name="UlkeSeriNo" class="form-control" placeholder="Örn: JPY4459" required />
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <label class="form-label">Hedef Üretim Bandı</label>
                             <select name="HedefBant" class="form-select" required>
                                 <option value="">Seçiniz...</option>
